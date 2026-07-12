@@ -26,6 +26,17 @@ codex plugin add network-radar@network-radar
 
 安装完成后开启一个新任务。如果插件没有立即出现，重启 Codex。
 
+## 升级已有安装
+
+已经安装过 Network Radar 的用户不一定会自动获得 GitHub 上的最新版本。先刷新 marketplace 快照，再重新安装插件：
+
+```bash
+codex plugin marketplace upgrade network-radar
+codex plugin add network-radar@network-radar
+```
+
+升级后请开启一个新任务；如果新版 Skill 仍未生效，重启 Codex。可以用 `codex plugin marketplace list` 检查当前 marketplace 来源。更多命令参见 [Codex marketplace 文档](https://learn.chatgpt.com/docs/build-plugins#add-a-marketplace-from-the-cli)。
+
 仅用于本地实验时，也可以让 Skill Installer 直接从仓库中的 Skill 目录安装：
 
 ```text
