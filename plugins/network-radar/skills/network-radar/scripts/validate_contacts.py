@@ -7,6 +7,7 @@ import argparse
 import csv
 import json
 from pathlib import Path
+from urllib.parse import parse_qs, urlsplit
 
 from merge_contacts import COLUMNS, stable_key
 
@@ -33,6 +34,16 @@ def validate(path: Path) -> dict:
         return {"path": str(path), "rows": len(rows), "errors": errors, "warnings": warnings}
 
     seen: dict[str, int] = {}
+    token_owners: dict[str, list[tuple[int, str]]] = {}
+    maimai_links = {
+        "total": 0,
+        "full_detail": 0,
+        "full_token": 0,
+        "search_fallback_primary": 0,
+        "missing_link": 0,
+        "missing_token": 0,
+        "missing_search_fallback_note": 0,
+    }
     for number, row in enumerate(rows, start=2):
         key = stable_key(row)
         if key in seen:
@@ -59,10 +70,78 @@ def validate(path: Path) -> dict:
         if not (row.get("平台") or "").strip():
             errors.append({"type": "missing_platform", "row": number})
 
+        platform = (row.get("平台") or "").strip().lower()
+        if platform in {"脉脉", "maimai"}:
+            maimai_links["total"] += 1
+            raw_url = (row.get("主页链接") or "").strip()
+            notes = row.get("备注/证据") or ""
+            if not raw_url:
+                maimai_links["missing_link"] += 1
+                errors.append({"type": "missing_maimai_link", "row": number})
+                continue
+            try:
+                parts = urlsplit(raw_url)
+            except ValueError:
+                errors.append({"type": "invalid_maimai_url", "row": number})
+                continue
+            query = parse_qs(parts.query)
+            host = parts.netloc.lower()
+            if not (host == "maimai.cn" or host.endswith(".maimai.cn")):
+                warnings.append({"type": "unexpected_maimai_link_host", "row": number, "host": host})
+
+            if parts.path.rstrip("/") == "/profile/detail":
+                maimai_links["full_detail"] += 1
+                dstu = (query.get("dstu") or [""])[0]
+                token = (query.get("trackable_token") or [""])[0]
+                source = (query.get("from") or [""])[0]
+                if not dstu:
+                    errors.append({"type": "maimai_detail_link_missing_dstu", "row": number})
+                if not token:
+                    maimai_links["missing_token"] += 1
+                    warnings.append({"type": "maimai_detail_link_missing_token", "row": number, "dstu": dstu})
+                else:
+                    maimai_links["full_token"] += 1
+                    token_owners.setdefault(token, []).append((number, dstu))
+                if source != "pc_web_search":
+                    warnings.append(
+                        {"type": "maimai_detail_link_missing_search_context", "row": number, "dstu": dstu}
+                    )
+                if "search_center" not in notes:
+                    maimai_links["missing_search_fallback_note"] += 1
+                    warnings.append({"type": "missing_maimai_search_fallback_note", "row": number})
+            elif parts.path.rstrip("/") == "/web/search_center":
+                maimai_links["search_fallback_primary"] += 1
+                if not (query.get("query") or [""])[0]:
+                    warnings.append({"type": "empty_maimai_search_fallback", "row": number})
+            else:
+                warnings.append(
+                    {"type": "unsupported_maimai_link_shape", "row": number, "path": parts.path}
+                )
+
+    for owners in token_owners.values():
+        distinct_ids = {dstu for _, dstu in owners if dstu}
+        if len(distinct_ids) > 1:
+            errors.append(
+                {
+                    "type": "reused_maimai_trackable_token",
+                    "rows": [row_number for row_number, _ in owners],
+                    "dstu_ids": sorted(distinct_ids),
+                }
+            )
+
+    maimai_total = maimai_links["total"]
+    maimai_links["full_token_coverage"] = (
+        round(maimai_links["full_token"] / maimai_total, 4) if maimai_total else None
+    )
+    maimai_links["fallback_primary_coverage"] = (
+        round(maimai_links["search_fallback_primary"] / maimai_total, 4) if maimai_total else None
+    )
+
     return {
         "path": str(path),
         "rows": len(rows),
         "unique_contacts": len(seen),
+        "maimai_links": maimai_links,
         "errors": errors,
         "warnings": warnings,
     }
@@ -82,4 +161,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

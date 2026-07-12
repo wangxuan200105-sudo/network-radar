@@ -22,6 +22,8 @@ Use these columns in this order:
 
 Use semicolons for multiple tags inside one cell. Leave unknown factual fields blank instead of guessing. Default `建联状态` to `未联系` for new rows.
 
+For Maimai rows, `主页链接` must follow `maimai-links.md`: prefer the current per-candidate full detail link with `dstu + trackable_token + search-source context`; otherwise use the encoded site-search fallback. Put the stable ID and fallback search URL in `备注/证据`. Never place a naked `profile/detail?dstu=...` link in the final workbook.
+
 For a standard new scan, include every deduplicated candidate that satisfies the hard constraints. Do not limit the main table to `高` priority or `已核验` rows. Use `核验状态` to distinguish evidence depth, and let filters or optional views expose a high-priority shortlist.
 
 ## Workbook structure
@@ -58,4 +60,7 @@ When the user requests Feishu Bitable, first finish and verify the same standard
 - Every `高` row must have a non-empty `优先级理由`.
 - Every confirmed relationship hook should have supporting text in `备注/证据` or be identified as an explicit platform label.
 - `已核验` must not rely only on a search snippet.
+- Each Maimai full detail link must use the token attached to the same candidate ID in the current search response.
+- A Maimai token must not be reused across different candidate IDs.
+- Every Maimai detail link must have a site-search fallback in `备注/证据`.
 - Do not include match or accessibility scores.

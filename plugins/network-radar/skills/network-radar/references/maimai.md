@@ -20,7 +20,7 @@ Expand the target function into genuine role-family synonyms before searching. F
 
 Search preference clues such as school or seniority in separate lanes. Do not require them in every query. Otherwise `校友优先` becomes an accidental alumni-only filter and damages recall.
 
-Collect only data visibly attached to each search result: displayed name, profile link or user ID, company, role, city, direction clues, and platform relationship tags.
+Collect only data visibly attached to each search result: displayed name, profile link or user ID, company, role, city, direction clues, platform relationship tags, and the result-specific navigation token when the page exposes it.
 
 Apply exclusions after collecting enough context to distinguish adjacent roles. `招商不看` excludes招商/商务拓展/招商运营 when that is the actual function, but it must not automatically exclude `商家运营`. Exclude clearly non-target functions such as product, engineering, HR, finance, legal, design, or sales only when the user said other job families are out of scope.
 
@@ -28,7 +28,7 @@ Prefer semantic page inspection. Use direct DOM extraction only when it is simpl
 
 ## Stable identity
 
-For Maimai profile URLs, use `dstu` as the stable internal ID when present. Store the full working profile URL in the table. If tracking tokens change, deduplicate by `dstu`, not the full query string.
+For Maimai profile URLs, use `dstu` as the stable internal ID when present. A stable identity and a working navigation URL are different artifacts: `dstu` supports deduplication, while the current result-specific `trackable_token` supports navigation. Store the full working profile URL in the table and deduplicate by `dstu`, not the full query string. Read `maimai-links.md` before exporting.
 
 ## Detail-page verification
 

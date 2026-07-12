@@ -16,7 +16,7 @@ Choose one route before acting:
 - **Targeted audit**: re-check one relationship type or segment, such as alumni or AI product contacts.
 - **Update**: merge fresh findings into an existing table and report additions, corrections, and missing records.
 
-For Maimai work, read [references/maimai.md](references/maimai.md). For update or audit work, also read [references/update.md](references/update.md).
+For Maimai work, read both [references/maimai.md](references/maimai.md) and [references/maimai-links.md](references/maimai-links.md). For update or audit work, also read [references/update.md](references/update.md).
 For Feishu Bitable output, read [references/feishu-bitable.md](references/feishu-bitable.md).
 For every new scan, read and apply [references/discovery-scope.md](references/discovery-scope.md).
 
@@ -49,6 +49,8 @@ Build an adaptive query plan from role families and company variants. Use the sc
 Collect visible search-result data first. Create a stable internal identity using, in order: platform user ID, canonical profile URL, or normalized `platform + name + company + role`. Deduplicate before opening detail pages.
 
 Treat search snippets and platform-provided relationship labels as discovery clues, not final evidence for profile facts. Keep every deduplicated candidate who satisfies the hard constraints. A missing detail-page verification changes `核验状态`; it does not remove an otherwise eligible candidate.
+
+For Maimai, separate stable identity from clickable navigation. Deduplicate by `dstu/id`, then enrich each row with that candidate's current per-result `trackable_token` from the authenticated search response. Never use a naked `profile/detail?dstu=...` URL as the primary link and never reuse a token across candidates. Follow [references/maimai-links.md](references/maimai-links.md).
 
 ## 4. Verify selectively
 
@@ -94,7 +96,7 @@ For a new scan, produce a main contact sheet. For update/audit work, also produc
 Before delivery:
 
 1. Validate required columns and priority values with `scripts/validate_contacts.py` when a CSV is available.
-2. Scan for duplicate stable identities and unsupported high-priority rows.
+2. Scan for duplicate stable identities, unsupported high-priority rows, and Maimai link-quality errors. Report full-token coverage and fallback-link coverage.
 3. Inspect representative rows and all corrected relationship labels.
 4. Visually render every workbook sheet and repair clipping, broken layout, or unreadable wrapping.
 5. Preserve the source file; write a new output unless the user explicitly requests an in-place update.

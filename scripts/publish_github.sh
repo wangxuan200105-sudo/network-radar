@@ -23,7 +23,7 @@ owner="$(gh api user --jq .login)"
 user_id="$(gh api user --jq .id)"
 author_name="$(gh api user --jq '.name // .login')"
 repo="network-radar"
-version="0.1.0"
+version="$(python3 -c 'import json; print(json.load(open("plugins/network-radar/.codex-plugin/plugin.json", encoding="utf-8"))["version"])')"
 
 python3 scripts/prepare_release.py --owner "$owner" --repo "$repo"
 python3 scripts/validate_repository.py --release
@@ -35,7 +35,7 @@ git config user.name "$author_name"
 git config user.email "${user_id}+${owner}@users.noreply.github.com"
 git add .
 if ! git diff --cached --quiet; then
-  git commit -m "feat: publish network-radar v${version}"
+  git commit -m "release: network-radar v${version}"
 fi
 
 if ! gh repo view "${owner}/${repo}" >/dev/null 2>&1; then
