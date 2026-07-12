@@ -14,6 +14,7 @@ COLUMNS = [
     "姓名/昵称",
     "平台",
     "主页链接",
+    "兜底搜索入口",
     "公司",
     "岗位/简介",
     "城市/地区",
@@ -39,6 +40,10 @@ DROP_QUERY_KEYS = {
     "utm_medium",
     "utm_campaign",
 }
+SEARCH_FALLBACK_RE = re.compile(r"https://(?:www\.)?maimai\.cn/web/search_center\?[^\s；。|]+")
+SEARCH_FALLBACK_NOTE_RE = re.compile(
+    r"[；;]?\s*若失效，兜底搜索入口：https://(?:www\.)?maimai\.cn/web/search_center\?[^\s；。|]+"
+)
 
 
 def norm(value: str) -> str:
@@ -75,14 +80,26 @@ def stable_key(row: dict[str, str]) -> str:
     return f"fallback:{fallback}"
 
 
-def read_rows(path: Path) -> list[dict[str, str]]:
+def read_rows(path: Path, *, allow_legacy: bool = False) -> list[dict[str, str]]:
     with path.open("r", encoding="utf-8-sig", newline="") as handle:
         reader = csv.DictReader(handle)
         headers = reader.fieldnames or []
         missing = [column for column in COLUMNS if column not in headers]
+        if allow_legacy:
+            missing = [column for column in missing if column != "兜底搜索入口"]
         if missing:
             raise ValueError(f"{path} 缺少字段：{', '.join(missing)}")
-        return [{column: (row.get(column) or "").strip() for column in COLUMNS} for row in reader]
+        rows = [{column: (row.get(column) or "").strip() for column in COLUMNS} for row in reader]
+        if allow_legacy and "兜底搜索入口" not in headers:
+            for row in rows:
+                match = SEARCH_FALLBACK_RE.search(row.get("备注/证据", ""))
+                if match:
+                    row["兜底搜索入口"] = match.group(0)
+                    row["备注/证据"] = SEARCH_FALLBACK_NOTE_RE.sub(
+                        "；详情直链可能随会话或时间失效",
+                        row.get("备注/证据", ""),
+                    )
+        return rows
 
 
 def write_rows(path: Path, headers: list[str], rows: list[dict[str, str]]) -> None:
@@ -199,7 +216,7 @@ def main() -> int:
     parser.add_argument("--changes", type=Path, required=True, help="Change-log CSV path")
     args = parser.parse_args()
 
-    old_rows = read_rows(args.old_csv)
+    old_rows = read_rows(args.old_csv, allow_legacy=True)
     fresh_rows = read_rows(args.fresh_csv)
     merged_rows, changes = merge(old_rows, fresh_rows)
     write_rows(args.output_csv, COLUMNS, merged_rows)

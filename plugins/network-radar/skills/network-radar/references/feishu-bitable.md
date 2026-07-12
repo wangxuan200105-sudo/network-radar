@@ -28,7 +28,7 @@ Do not overwrite an existing table without explicit confirmation. For updates, p
 3. Create a Bitable or open the confirmed destination.
 4. Use Feishu's file-import flow to import the verified file as a multidimensional table.
 5. After import, set or verify field types using the mapping below.
-6. Verify the total row count, all 15 field names, the first row, one high-priority row, and one evidence-heavy row.
+6. Verify the total row count, all 16 field names, the first row, one high-priority row, and one evidence-heavy row.
 7. Return the Feishu link together with the Excel fallback.
 
 For rich Feishu editors, use screenshot-guided interaction first. Perform a small probe before substantial edits and verify each meaningful change visually.
@@ -40,6 +40,7 @@ For rich Feishu editors, use screenshot-guided interaction first. Perform a smal
 | 姓名/昵称 | Text |
 | 平台 | Single select |
 | 主页链接 | URL |
+| 兜底搜索入口 | URL |
 | 公司 | Text or single select |
 | 岗位/简介 | Multiline text |
 | 城市/地区 | Single select |
@@ -73,4 +74,3 @@ Prefer batch writes within the current documented limit and serialize writes to 
 - On field-type mismatch, stop the import/update and correct the schema before writing more rows.
 - On partial UI import, preserve the verified Excel and report exactly which rows or fields remain incomplete.
 - Never claim Feishu delivery succeeded until the destination link and representative records have been verified.
-

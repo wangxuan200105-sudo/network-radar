@@ -49,10 +49,10 @@ Build a stable, URL-encoded fallback from the most discriminating visible terms:
 https://maimai.cn/web/search_center?type=contact&query=<encoded name company role>&highlight=true
 ```
 
-Put the fallback in `备注/证据` even when the full detail link is available. Use wording such as:
+Put the fallback in the dedicated `兜底搜索入口` field immediately after `主页链接`, even when the full detail link is available. Keep only the stable ID, link source, and expiry note in `备注/证据`, for example:
 
 ```text
-稳定ID：dstu=223214413；链接来源：本轮站内搜索响应；备用搜索入口：https://maimai.cn/web/search_center?...；详情直链可能随会话或时间失效。
+稳定ID：dstu=223214413；链接来源：本轮站内搜索响应；详情直链可能随会话或时间失效。
 ```
 
 If no current token is available, use the search fallback as `主页链接` and note `当前未取得完整跳转 token，先从搜索结果卡片进入主页`.
@@ -64,7 +64,7 @@ Before writing the final workbook:
 1. Reconcile every detail URL's `dstu` with the candidate's stable ID.
 2. Confirm every full detail URL has a non-empty `trackable_token` from the same record.
 3. Reject any token mapped to more than one distinct candidate ID.
-4. Record the count and percentage of full-token links and search fallbacks.
+4. Record the count and percentage of full-token links and populated `兜底搜索入口` fields.
 5. Run targeted searches for missing-token rows before accepting fallback-only output.
 6. Open a small representative sample through the authenticated search context and verify that the expected profile is reached without 403.
 7. Run `scripts/validate_contacts.py` on the exported CSV.
@@ -76,4 +76,3 @@ Do not claim links are permanent. Report the retrieval time, full-token coverage
 On a later scan, retain `dstu` as the contact key and refresh the full navigation URL from the new search response. A token change is link maintenance, not a new person and not a meaningful profile-field change.
 
 Do not commit exported URLs containing real candidate tokens to a public repository. Keep them only in the user's private output files.
-

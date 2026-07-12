@@ -42,7 +42,8 @@ def validate(path: Path) -> dict:
         "search_fallback_primary": 0,
         "missing_link": 0,
         "missing_token": 0,
-        "missing_search_fallback_note": 0,
+        "search_fallback": 0,
+        "missing_search_fallback": 0,
     }
     for number, row in enumerate(rows, start=2):
         key = stable_key(row)
@@ -74,7 +75,26 @@ def validate(path: Path) -> dict:
         if platform in {"脉脉", "maimai"}:
             maimai_links["total"] += 1
             raw_url = (row.get("主页链接") or "").strip()
-            notes = row.get("备注/证据") or ""
+            fallback_url = (row.get("兜底搜索入口") or "").strip()
+            if not fallback_url:
+                maimai_links["missing_search_fallback"] += 1
+                errors.append({"type": "missing_maimai_search_fallback", "row": number})
+            else:
+                try:
+                    fallback_parts = urlsplit(fallback_url)
+                    fallback_query = parse_qs(fallback_parts.query)
+                    fallback_host = fallback_parts.netloc.lower()
+                    fallback_valid = (
+                        (fallback_host == "maimai.cn" or fallback_host.endswith(".maimai.cn"))
+                        and fallback_parts.path.rstrip("/") == "/web/search_center"
+                        and bool((fallback_query.get("query") or [""])[0])
+                    )
+                    if fallback_valid:
+                        maimai_links["search_fallback"] += 1
+                    else:
+                        errors.append({"type": "invalid_maimai_search_fallback", "row": number})
+                except ValueError:
+                    errors.append({"type": "invalid_maimai_search_fallback", "row": number})
             if not raw_url:
                 maimai_links["missing_link"] += 1
                 errors.append({"type": "missing_maimai_link", "row": number})
@@ -106,9 +126,6 @@ def validate(path: Path) -> dict:
                     warnings.append(
                         {"type": "maimai_detail_link_missing_search_context", "row": number, "dstu": dstu}
                     )
-                if "search_center" not in notes:
-                    maimai_links["missing_search_fallback_note"] += 1
-                    warnings.append({"type": "missing_maimai_search_fallback_note", "row": number})
             elif parts.path.rstrip("/") == "/web/search_center":
                 maimai_links["search_fallback_primary"] += 1
                 if not (query.get("query") or [""])[0]:
@@ -132,6 +149,9 @@ def validate(path: Path) -> dict:
     maimai_total = maimai_links["total"]
     maimai_links["full_token_coverage"] = (
         round(maimai_links["full_token"] / maimai_total, 4) if maimai_total else None
+    )
+    maimai_links["search_fallback_coverage"] = (
+        round(maimai_links["search_fallback"] / maimai_total, 4) if maimai_total else None
     )
     maimai_links["fallback_primary_coverage"] = (
         round(maimai_links["search_fallback_primary"] / maimai_total, 4) if maimai_total else None

@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.2 - 2026-07-12
+
+- Added `兜底搜索入口` as the fourth main-table field, immediately after `主页链接`.
+- Expanded the standard contact schema from 15 to 16 fields and updated Feishu field mapping.
+- Made missing or malformed Maimai fallback-search links a validation error and added fallback-field coverage reporting.
+- Added automatic migration of fallback URLs from legacy 15-column evidence notes during incremental merges.
+- Preserved `dstu`-based identity matching while independently refreshing both detail and fallback links.
+
 ## 0.1.1 - 2026-07-12
 
 - Fixed Maimai profile links by separating stable `dstu` identity from session-aware navigation URLs.

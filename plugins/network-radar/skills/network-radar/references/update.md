@@ -13,8 +13,9 @@ Use this workflow only when the user supplies an earlier table, requests an upda
 4. Prefer newly verified factual fields over old unverified values.
 5. Never replace confirmed evidence with a weaker search snippet.
 6. For Maimai, replace an old navigation URL with the freshly captured per-candidate full link while continuing to match the person by `dstu`; do not treat token refresh as a contact change.
-7. Keep unmatched old rows; mark them in the change log as `本次未发现`, not deleted.
-8. Add unmatched fresh rows as `新增`.
+7. Refresh `兜底搜索入口` from the current discriminating search query. Accept legacy 15-column tables as old inputs and populate the new field during the merge.
+8. Keep unmatched old rows; mark them in the change log as `本次未发现`, not deleted.
+9. Add unmatched fresh rows as `新增`.
 
 Use `scripts/merge_contacts.py OLD.csv FRESH.csv OUTPUT.csv --changes CHANGES.csv` for deterministic CSV merging. Review the generated changes before workbook export.
 

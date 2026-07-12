@@ -7,22 +7,23 @@ Use these columns in this order:
 1. `姓名/昵称`
 2. `平台`
 3. `主页链接`
-4. `公司`
-5. `岗位/简介`
-6. `城市/地区`
-7. `方向标签`
-8. `角色类型`
-9. `关系钩子`
-10. `核验状态`
-11. `优先级`
-12. `优先级理由`
-13. `建联状态`
-14. `推荐开场白`
-15. `备注/证据`
+4. `兜底搜索入口`
+5. `公司`
+6. `岗位/简介`
+7. `城市/地区`
+8. `方向标签`
+9. `角色类型`
+10. `关系钩子`
+11. `核验状态`
+12. `优先级`
+13. `优先级理由`
+14. `建联状态`
+15. `推荐开场白`
+16. `备注/证据`
 
 Use semicolons for multiple tags inside one cell. Leave unknown factual fields blank instead of guessing. Default `建联状态` to `未联系` for new rows.
 
-For Maimai rows, `主页链接` must follow `maimai-links.md`: prefer the current per-candidate full detail link with `dstu + trackable_token + search-source context`; otherwise use the encoded site-search fallback. Put the stable ID and fallback search URL in `备注/证据`. Never place a naked `profile/detail?dstu=...` link in the final workbook.
+For Maimai rows, `主页链接` must follow `maimai-links.md`: prefer the current per-candidate full detail link with `dstu + trackable_token + search-source context`; otherwise use the encoded site-search fallback. Put the encoded site-search URL in `兜底搜索入口`, immediately beside `主页链接`, and put the stable ID plus expiry/source notes in `备注/证据`. Never place a naked `profile/detail?dstu=...` link in the final workbook.
 
 For a standard new scan, include every deduplicated candidate that satisfies the hard constraints. Do not limit the main table to `高` priority or `已核验` rows. Use `核验状态` to distinguish evidence depth, and let filters or optional views expose a high-priority shortlist.
 
@@ -62,5 +63,5 @@ When the user requests Feishu Bitable, first finish and verify the same standard
 - `已核验` must not rely only on a search snippet.
 - Each Maimai full detail link must use the token attached to the same candidate ID in the current search response.
 - A Maimai token must not be reused across different candidate IDs.
-- Every Maimai detail link must have a site-search fallback in `备注/证据`.
+- Every Maimai row must have a valid site-search URL in `兜底搜索入口`.
 - Do not include match or accessibility scores.
