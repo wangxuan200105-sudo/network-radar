@@ -1,0 +1,20 @@
+{
+  "name": "network-radar",
+  "interface": {
+    "displayName": "人脉雷达"
+  },
+  "plugins": [
+    {
+      "name": "network-radar",
+      "source": {
+        "source": "local",
+        "path": "./plugins/network-radar"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

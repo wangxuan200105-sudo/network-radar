@@ -1,0 +1,42 @@
+{
+  "name": "network-radar",
+  "version": "0.1.0",
+  "description": "Discover, verify, prioritize, and organize professional contacts into an explainable networking table.",
+  "author": {
+    "name": "王旋",
+    "url": "https://github.com/wangxuan200105-sudo"
+  },
+  "license": "MIT",
+  "keywords": [
+    "networking",
+    "professional-contacts",
+    "outreach",
+    "alumni",
+    "maimai",
+    "spreadsheet"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "人脉雷达",
+    "shortDescription": "发现、核验并整理值得优先建联的职业人脉",
+    "longDescription": "从自然语言目标出发，搜索和核验职业人脉，给出可解释的优先级，生成联系人表、更新记录和自然的建联开场白。",
+    "developerName": "王旋",
+    "category": "Productivity",
+    "capabilities": [
+      "Web discovery",
+      "Profile verification",
+      "Spreadsheet export",
+      "Feishu Bitable export",
+      "Outreach drafting"
+    ],
+    "defaultPrompt": [
+      "使用人脉雷达：我是【身份或背景】，想认识【目标人群】，主要希望【建联目的】。",
+      "检查这份联系人表是否遗漏校友，并告诉我与上一版相比有哪些变化。",
+      "分析这个人的主页，并帮我写一条自然、低压力的建联开场白。"
+    ],
+    "brandColor": "#E07A5F",
+    "websiteURL": "https://github.com/wangxuan200105-sudo/network-radar"
+  },
+  "repository": "https://github.com/wangxuan200105-sudo/network-radar",
+  "homepage": "https://github.com/wangxuan200105-sudo/network-radar"
+}

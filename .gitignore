@@ -1,0 +1,17 @@
+.DS_Store
+.env
+.env.*
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+outputs/
+private-data/
+*.xlsx
+*.xls
+*.csv
+*.tsv
+*.png
+*.jpg
+*.jpeg
+

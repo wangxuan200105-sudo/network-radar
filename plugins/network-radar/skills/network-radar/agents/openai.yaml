@@ -1,0 +1,4 @@
+interface:
+  display_name: "人脉雷达"
+  short_description: "从网页发现、核验并整理值得优先建联的职业人脉联系人"
+  default_prompt: "使用 $network-radar：我是【身份或背景】，想认识【目标人群】，主要希望【建联目的】；如有偏好，可补充【优先或排除条件】。"
