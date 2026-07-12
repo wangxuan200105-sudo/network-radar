@@ -8,7 +8,7 @@ If login, CAPTCHA, user control, or an inactive task space blocks work, follow t
 
 ## Discovery
 
-Build an adaptive search matrix from the user's hard constraints and role-family vocabulary. A standard scan commonly needs 8–20 focused searches; use fewer only for an explicitly quick preview. Typical combinations include:
+Build an adaptive search matrix from the user's hard constraints and role-family vocabulary. A standard scan commonly needs 8–20 focused searches, but search count is an orientation rather than a completion quota. Track material lanes and stop from lane coverage plus diminishing eligible additions. Typical combinations include:
 
 - Company + function
 - Company + specialty
@@ -47,5 +47,7 @@ Record concise evidence in `备注/证据`, for example:
 Do not claim to have found every relevant Maimai user. State search terms and the number of results/pages inspected. Stop or slow down if the platform shows access limits.
 
 Do not stop merely because the verified high-priority segment is small. Keep the broader eligible pool and apply the saturation rules in `references/discovery-scope.md`.
+
+When a standard scan yields fewer than 40 eligible contacts, run the small-pool expansion review in `references/discovery-scope.md` before finishing. A smaller final pool is acceptable after that review; never add unrelated profiles to reach a number.
 
 When finished, close the ego-browser task space unless the user explicitly needs the live page, login handoff, or visible result preserved.

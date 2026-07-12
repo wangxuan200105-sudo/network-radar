@@ -44,7 +44,7 @@ For a new scan, restate the interpreted background, target, purpose, and optiona
 
 ## 3. Discover broadly
 
-Build an adaptive query plan from role families and company variants. Use the scope and stopping rules in [references/discovery-scope.md](references/discovery-scope.md). A standard new scan is coverage-first, not a 20-person shortlist.
+Build an adaptive query plan from role families and company variants. Use the scope and stopping rules in [references/discovery-scope.md](references/discovery-scope.md). A standard new scan is coverage-first, not a 20-person shortlist. Treat result-count ranges as warnings, not quotas: finish from documented lane coverage and diminishing eligible additions. If a standard scan has fewer than 40 eligible contacts, complete one expansion review before deciding to stop.
 
 Collect visible search-result data first. Create a stable internal identity using, in order: platform user ID, canonical profile URL, or normalized `platform + name + company + role`. Deduplicate before opening detail pages.
 

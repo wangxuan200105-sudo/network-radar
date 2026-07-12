@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.3 - 2026-07-12
+
+- Replaced hard result-count completion logic with lane coverage and diminishing eligible additions.
+- Kept result-count ranges as under-search warnings rather than quotas.
+- Added a mandatory one-pass expansion review when a standard scan yields fewer than 40 eligible contacts.
+- Added per-lane coverage states and batch-level new-contact tracking.
+- Allowed a scan to finish below 40 after expansion review when material lanes are covered and marginal additions remain low.
+
 ## 0.1.2 - 2026-07-12
 
 - Added `兜底搜索入口` as the fourth main-table field, immediately after `主页链接`.

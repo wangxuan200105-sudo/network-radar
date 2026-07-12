@@ -25,10 +25,10 @@ Example interpretation:
 ## Scope modes
 
 - **Quick preview**: use only when the user says `先看看`, `快速`, `样例`, or gives a small limit. Aim for roughly 20–40 unique eligible candidates.
-- **Standard scan**: default for `抓取人脉`, `建立人脉池`, or an unspecified count. Aim for roughly 60–150 unique eligible candidates when the platform has enough relevant supply.
+- **Standard scan**: default for `抓取人脉`, `建立人脉池`, or an unspecified count. A broad target often yields roughly 60–150 unique eligible candidates when the platform has enough relevant supply, but this is a warning range rather than a quota.
 - **Deep scan**: use when the user asks for `尽量全`, `全面`, `深挖`, or continued expansion. Search until role-family and company-variant lanes saturate or the platform blocks further access.
 
-These ranges are coverage guides, not quotas. Never add irrelevant candidates just to reach a number. If the platform exposes fewer eligible people, report the evidence and search coverage that explains the smaller pool.
+Never add irrelevant candidates just to reach a number. Result count diagnoses possible under-search; it does not decide completion by itself. Decide completion from coverage of material search lanes, marginal eligible additions, and platform limits.
 
 ## Query expansion
 
@@ -43,16 +43,30 @@ Build query lanes instead of one narrow intersection:
 
 Do not put the school and seniority preference into every query. Broad queries build the pool; preference queries improve ranking and evidence.
 
+For a standard scan, keep a lightweight coverage ledger. Mark each material company-alias and role-family lane as `not searched`, `active`, `saturated`, or `blocked`, and record the batches inspected plus new eligible contacts. Do not infer lane coverage merely from the overall candidate count.
+
 ## Stopping rules
 
-Continue discovery until one of these conditions is met:
+Evaluate stopping per material lane, then for the scan as a whole. Continue discovery until one of these conditions is met:
 
-- All material role-family and company-variant lanes have been searched, and two consecutive result batches add fewer than 5 new eligible contacts or less than 10% new unique contacts.
+- All material role-family and company-variant lanes have been searched, and each remaining active lane has two consecutive result batches that add fewer than 5 new eligible contacts or less than 10% new unique contacts.
 - The user-specified result limit is reached.
 - The platform has no more results.
 - Login, CAPTCHA, rate limits, or access restrictions block safe continuation.
 
 Do not stop because the first page or verified shortlist contains 20–30 people.
+
+## Small-pool expansion review
+
+If a standard scan has fewer than 40 eligible contacts, treat that as a warning and complete one deliberate expansion review before deciding to stop:
+
+1. Recheck whether any soft preference was accidentally applied as a hard constraint.
+2. Add missed company aliases, business-unit names, and current-employer variants.
+3. Add genuine role-family synonyms and adjacent titles that remain inside the user's target function.
+4. Review exclusions for false positives, especially ambiguous adjacent roles.
+5. Inspect whether important lanes stopped on the first page or before two low-yield batches.
+
+After this review, the scan may finish below 40 when material lanes are covered and marginal additions remain low. Explain the smaller pool using observed search coverage or platform limits. Do not keep expanding merely to cross the warning line.
 
 ## Candidate pool versus verified shortlist
 
@@ -73,6 +87,6 @@ Always record:
 - raw results, unique candidates, eligible candidates, verified profiles, and excluded candidates;
 - top exclusion reasons;
 - stopping condition and any platform limitation.
+- whether the small-pool expansion review was triggered and what it changed.
 
-If the final eligible pool is below 40 in a standard scan, explicitly explain why. Do not silently present a small pool as complete.
-
+If the final eligible pool is below 40 in a standard scan, explicitly report the expansion review and explain why the scan ended. Do not silently present a small pool as complete.
