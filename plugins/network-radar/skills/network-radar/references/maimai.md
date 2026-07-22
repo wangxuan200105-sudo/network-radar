@@ -22,7 +22,9 @@ Search preference clues such as school or seniority in separate lanes. Do not re
 
 Collect only data visibly attached to each search result: displayed name, profile link or user ID, company, role, city, direction clues, platform relationship tags, and the result-specific navigation token when the page exposes it.
 
-Apply exclusions after collecting enough context to distinguish adjacent roles. `招商不看` excludes招商/商务拓展/招商运营 when that is the actual function, but it must not automatically exclude `商家运营`. Exclude clearly non-target functions such as product, engineering, HR, finance, legal, design, or sales only when the user said other job families are out of scope.
+Apply [eligibility-gates.md](eligibility-gates.md) after collecting enough context to distinguish adjacent roles. A query match is not an admission decision. In particular, `former=0` does not prove current employment at the company named in the query; verify the displayed current employer. For a product-manager-only request, do not admit `产品运营`, `策略运营`, `招商运营`, design, engineering, or other adjacent functions merely because the result contains `产品`, `策略`, or `AI`.
+
+Apply exclusions by functional meaning. `招商不看` excludes招商/商务拓展/招商运营 when that is the actual function, but it must not automatically exclude `商家运营` from an operations request. Exclude clearly non-target functions only when the user's target job family or explicit exclusions make them out of scope.
 
 Prefer semantic page inspection. Use direct DOM extraction only when it is simpler and returns data already visible in the authenticated page. Do not encode brittle selectors into permanent skill logic without verifying them in the current session.
 

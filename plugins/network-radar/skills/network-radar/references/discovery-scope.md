@@ -1,6 +1,6 @@
 # Discovery scope and recall
 
-Use this reference for every new contact scan. Optimize for relevant coverage first, then verification depth and prioritization.
+Use this reference for every new contact scan. Optimize for relevant coverage first, then apply the admission gates in [eligibility-gates.md](eligibility-gates.md) before verification depth and prioritization.
 
 ## Constraint model
 
@@ -12,6 +12,7 @@ Translate the request into four separate sets:
 4. **Scope**: quick preview, standard scan, deep scan, or a user-specified result limit.
 
 Never combine soft preferences into hard eligibility. Rank after the eligible pool is collected.
+Never treat raw search recall as eligible-pool recall. Broad discovery is allowed; broad admission is not.
 
 Example interpretation:
 
@@ -70,12 +71,14 @@ After this review, the scan may finish below 40 when material lanes are covered 
 
 ## Candidate pool versus verified shortlist
 
-Maintain two logical layers:
+Maintain four logical layers:
 
-- **Eligible pool**: every deduplicated candidate satisfying hard constraints, including `待核验` rows.
+- **Raw discovery**: every deduplicated search result worth evaluating.
+- **Eligible pool**: every candidate with decisive evidence for all hard constraints.
+- **Review and exclusion log**: ambiguous rows marked `待核验` and decisive mismatches marked `排除`.
 - **Verified priority segment**: candidates whose detail pages were inspected first because preference clues or role relevance suggested higher priority.
 
-The main output is the eligible pool. A shortlist, filtered view, or `高优先级` sheet is secondary. Selective verification controls evidence depth, not whether a relevant candidate is allowed into the main table.
+The main output is the eligible pool. A shortlist, filtered view, or `高优先级` sheet is secondary. Pending or excluded rows do not receive priority. Selective verification controls evidence depth inside the eligible pool; hard admission controls whether a candidate is allowed into it.
 
 ## Coverage report
 
@@ -84,7 +87,7 @@ Always record:
 - scope mode;
 - query families and important synonyms used;
 - pages or batches inspected;
-- raw results, unique candidates, eligible candidates, verified profiles, and excluded candidates;
+- raw results, unique candidates, eligible candidates, pending-review candidates, verified profiles, and excluded candidates;
 - top exclusion reasons;
 - stopping condition and any platform limitation.
 - whether the small-pool expansion review was triggered and what it changed.

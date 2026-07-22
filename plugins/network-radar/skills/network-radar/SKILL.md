@@ -19,6 +19,7 @@ Choose one route before acting:
 For Maimai work, read both [references/maimai.md](references/maimai.md) and [references/maimai-links.md](references/maimai-links.md). For update or audit work, also read [references/update.md](references/update.md).
 For Feishu Bitable output, read [references/feishu-bitable.md](references/feishu-bitable.md).
 For every new scan, read and apply [references/discovery-scope.md](references/discovery-scope.md).
+Whenever the request includes a target company, current-employment requirement, target job family, or exclusion, read and apply [references/eligibility-gates.md](references/eligibility-gates.md).
 
 ## 1. Understand the request
 
@@ -46,9 +47,9 @@ For a new scan, restate the interpreted background, target, purpose, and optiona
 
 Build an adaptive query plan from role families and company variants. Use the scope and stopping rules in [references/discovery-scope.md](references/discovery-scope.md). A standard new scan is coverage-first, not a 20-person shortlist. Treat result-count ranges as warnings, not quotas: finish from documented lane coverage and diminishing eligible additions. If a standard scan has fewer than 40 eligible contacts, complete one expansion review before deciding to stop.
 
-Collect visible search-result data first. Create a stable internal identity using, in order: platform user ID, canonical profile URL, or normalized `platform + name + company + role`. Deduplicate before opening detail pages.
+Collect visible search-result data into a raw discovery layer first. Create a stable internal identity using, in order: platform user ID, canonical profile URL, or normalized `platform + name + company + role`. Deduplicate before opening detail pages.
 
-Treat search snippets and platform-provided relationship labels as discovery clues, not final evidence for profile facts. Keep every deduplicated candidate who satisfies the hard constraints. A missing detail-page verification changes `核验状态`; it does not remove an otherwise eligible candidate.
+Treat search snippets and platform-provided relationship labels as discovery clues, not final evidence for profile facts. Do not copy raw search results directly into the main pool. Apply the current-employer gate, target-role gate, and explicit exclusions from `eligibility-gates.md`; place decisive matches in the eligible pool, ambiguous candidates in a review log, and decisive mismatches in an exclusion log. A missing detail-page verification changes `核验状态` only after the candidate has enough evidence to satisfy the admission gates.
 
 For Maimai, separate stable identity from clickable navigation. Deduplicate by `dstu/id`, then enrich each row with that candidate's current per-result `trackable_token` from the authenticated search response. Never use a naked `profile/detail?dstu=...` URL as the primary link and never reuse a token across candidates. Follow [references/maimai-links.md](references/maimai-links.md).
 
@@ -68,6 +69,8 @@ Apply [references/evidence-priority.md](references/evidence-priority.md) exactly
 Use the strict profile-section rule for alumni: a school name must appear inside the person's own education section. A nearby school name in a recommendation module is not alumni evidence.
 
 ## 5. Decide priority
+
+Decide priority only after admission. Never assign `高`, `中`, or `低` to excluded or pending-review candidates, and never let alumni, influence, mutual contacts, or seniority rescue a failed hard constraint.
 
 Use only `高`, `中`, or `低`. Never produce match scores, accessibility scores, confidence percentages, or other pseudo-precision.
 
@@ -97,9 +100,10 @@ Before delivery:
 
 1. Validate required columns and priority values with `scripts/validate_contacts.py` when a CSV is available.
 2. Scan for duplicate stable identities, unsupported high-priority rows, and Maimai link-quality errors. Report full-token coverage and fallback-link coverage.
-3. Inspect representative rows and all corrected relationship labels.
-4. Visually render every workbook sheet and repair clipping, broken layout, or unreadable wrapping.
-5. Preserve the source file; write a new output unless the user explicitly requests an in-place update.
+3. Verify that every main-pool row passed the hard admission gates and that no pending or excluded row appears in a priority view.
+4. Inspect representative rows and all corrected relationship labels.
+5. Visually render every workbook sheet and repair clipping, broken layout, or unreadable wrapping.
+6. Preserve the source file; write a new output unless the user explicitly requests an in-place update.
 
 ## 8. Handle interruptions and limits
 

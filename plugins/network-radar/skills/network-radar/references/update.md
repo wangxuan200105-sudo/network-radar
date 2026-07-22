@@ -29,6 +29,8 @@ For a request such as `重新检查校友`:
 4. Record false positives separately, such as `同济出现在旁栏推荐，不属于本人教育经历`.
 5. Report how many rows were checked, corrected, left pending, and inaccessible.
 
+For a hard-constraint contamination audit, apply [eligibility-gates.md](eligibility-gates.md) to every row before preserving the main pool. Keep a rollback copy, move ambiguous rows to `待核验`, move decisive mismatches to `排除清单`, and ensure only eligible rows retain priority and outreach drafts.
+
 ## Change types
 
 Use concise values:

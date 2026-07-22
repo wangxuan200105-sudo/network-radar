@@ -27,6 +27,8 @@ For Maimai rows, `主页链接` must follow `maimai-links.md`: prefer the curren
 
 For a standard new scan, include every deduplicated candidate that satisfies the hard constraints. Do not limit the main table to `高` priority or `已核验` rows. Use `核验状态` to distinguish evidence depth, and let filters or optional views expose a high-priority shortlist.
 
+Do not put raw discovery, pending-review, or excluded rows in `联系人池`. For audits, keep them in `待核验` and `排除清单` sheets or change-log records with concise reasons. Only eligible rows receive priority and outreach drafts.
+
 ## Workbook structure
 
 For a new scan, create:
@@ -38,6 +40,8 @@ For a new scan, create:
 For an update or targeted audit, also create:
 
 - `本次更新`: change type, stable ID or profile link, person, changed fields, old value, new value, evidence, and action.
+- `待核验`: candidates whose current employer or target role remains ambiguous.
+- `排除清单`: candidates who decisively fail a hard constraint, with the exclusion reason.
 
 Keep internal stable IDs in processing data or the update log when needed; do not add them to the approved main-table columns.
 
@@ -65,3 +69,4 @@ When the user requests Feishu Bitable, first finish and verify the same standard
 - A Maimai token must not be reused across different candidate IDs.
 - Every Maimai row must have a valid site-search URL in `兜底搜索入口`.
 - Do not include match or accessibility scores.
+- No pending-review or excluded row may appear in `高优先级`.
